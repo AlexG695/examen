@@ -28,6 +28,7 @@ CREATE TABLE libros(
     fk_iIdAutor INT NOT NULL,
     sNombreLibro VARCHAR(80) NOT NULL UNIQUE,
     iNumeroPaginas INT NOT NULL,
+    sCategoria TEXT NOT NULL,
     iCalificacionPromedio INT DEFAULT 0,
     tFechaPublicacion VARCHAR(10) NOT NULL,
     FOREIGN KEY( fk_iIdAutor ) REFERENCES autores( iIdAutor ) ON UPDATE CASCADE ON DELETE CASCADE
@@ -49,17 +50,18 @@ CREATE PROCEDURE LogIn(correo VARCHAR(150))
 BEGIN
 	SELECT iId, sNombre, sCorreo, sContrasenia
     FROM usuarios
-    WHERE sCorreo = correo;
+    WHERE sCorreo = correo
 END //
 
 DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE CrearAutor(nombre TEXT, pais Text, lengua TEXT)
+CREATE PROCEDURE ObtenerUsuarioPorId(id INT)
 BEGIN
-	INSERT INTO autores(sNombreAutor, sPaisOrigen, sLenguaNativa, tFechaNacimiento)
-    VALUES( nombre, pais, lengua, Now());
+	SELECT (sNombre, sApellido)
+    FROM usuarios
+    WHERE iId = id;
 END //
 
 DELIMITER ;
@@ -67,14 +69,111 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE CrearAutor(nombre TEXT, pais Text, lengua TEXT)
+CREATE PROCEDURE EliminarUsuarioPorId(id INT)
 BEGIN
-	INSERT INTO autores(sNombreAutor, sPaisOrigen, sLenguaNativa, tFechaNacimiento)
-    VALUES( nombre, pais, lengua, Now());
+	DELETE FROM usuarios
+    WHERE iId = id;
 END //
 
 DELIMITER ;
 
-SELECT * FROM usuarios
+
+DELIMITER //
+CREATE PROCEDURE CrearAutor(nombre TEXT, pais Text, lengua TEXT, fecha VARCHAR)
+BEGIN
+	INSERT INTO autores(sNombreAutor, sPaisOrigen, sLenguaNativa, tFechaNacimiento)
+    VALUES( nombre, pais, lengua, fecha);
+END //
+
+DELIMITER ;
 
 
+
+DELIMITER //
+CREATE PROCEDURE ObtenerAutorPorId(id INT)
+BEGIN
+	SELECT (iIdAutor, sNombreAutor, sPaisOrigen, sLenguaNativa, tFechaNacimiento)
+    FROM autores
+    WHERE iIdAutor = id;
+END //
+
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE EliminarAutorPorId(id INT)
+BEGIN
+	DELETE FROM autores
+    WHERE iIdAutor = id;
+END //
+
+DELIMITER ;
+
+
+
+DELIMITER //
+CREATE PROCEDURE CrearLibro( idAutor INT, nombreLibro TEXT, numeroPaginas INT, categoria TEXT )
+BEGIN
+    INSERT INTO libros( fk_iIdAutor, sNombreLibro, iNumeroPaginas, sCategoria)
+    VALUES( idAutor, nombreLibro, numeroPaginas, categoria );
+END //
+
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE ObtenerLibroPorId(id INT)
+BEGIN
+	SELECT (fk_iIdAutor, sNombreLibro, iNumeroPaginas, sCategoria, iCalificacionPromedio)
+    FROM libros
+    WHERE iIdLibro = id;
+END //
+
+DELIMITER ;
+
+
+
+DELIMITER //
+CREATE PROCEDURE EliminarLibroPorId(id INT)
+BEGIN
+	DELETE FROM libros
+    WHERE iIdLibro = id;
+END //
+
+DELIMITER ;
+
+
+
+DELIMITER //
+CREATE PROCEDURE ObtenerLibroPorIdAutor(id INT)
+BEGIN
+	SELECT (fk_iIdAutor, sNombreLibro, iNumeroPaginas, sCategoria, iCalificacionPromedio)
+    FROM libros
+    WHERE fk_iIdAutor = id;
+END //
+
+DELIMITER ;
+
+
+
+
+DELIMITER //
+CREATE PROCEDURE ObtenerLibrosPorIdAutor(id INT)
+BEGIN
+	SELECT (fk_iIdAutor, sNombreLibro, iNumeroPaginas, sCategoria, iCalificacionPromedio)
+    FROM libros
+    WHERE fk_iIdAutor = id;
+END //
+
+DELIMITER ;
+
+
+
+DELIMITER //
+CREATE PROCEDURE ObtenerAutoresConConteoPorLibros()
+BEGIN
+	SELECT (sNombreAutor) as Autor
+    FROM autores
+END //
+
+DELIMITER ;

@@ -8,6 +8,22 @@ const ComparePass = require('../utils/ComparePass');
 module.exports = {
 
 
+    async EncontrarUsuarioPorId(req, res) {
+        try {
+            
+            const id = req.body.id;
+
+            connection.query('CALL EncontrarUsuarioPorId(?)', [
+                id
+            ], function(err, result) {
+                
+            });
+
+        } catch (error) {
+            
+        }
+    },
+
 
     async crearUsuario(req, res) {
         try {
@@ -90,6 +106,23 @@ module.exports = {
         } catch (error) {
             
         }
+    },
+
+    async EliminarUsuario(req, res) {
+        try {
+            
+            const idUser = req.body.id;
+
+            connection.query('CALL EliminarUsuarioPorId(?)', [
+                idUser
+            ], function(err, result) {
+
+            });
+
+        } catch (error) {
+            
+        }
     }
+
 
 }

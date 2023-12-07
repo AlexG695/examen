@@ -21,6 +21,8 @@ require('dotenv').config({path: 'values.env'})
 
 const Usuario = require('./src/routes/usuariosRoutes');
 const Mensajes = require('./src/routes/mensajeRoutes');
+const Autor = require('./src/routes/autoresRoutes');
+const Libro = require('./src/routes/librosRoutes');
 
 
 /**
@@ -55,6 +57,8 @@ app.set('port', port);
 
 Usuario(app);
 Mensajes(app);
+Autor(app);
+Libro(app)
 
 
 
