@@ -112,10 +112,10 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE CrearLibro( idAutor INT, nombreLibro TEXT, numeroPaginas INT, categoria TEXT )
+CREATE PROCEDURE CrearLibro( idAutor INT, nombreLibro TEXT, numeroPaginas INT, categoria TEXT, fecha VARCHAR(10))
 BEGIN
-    INSERT INTO libros( fk_iIdAutor, sNombreLibro, iNumeroPaginas, sCategoria)
-    VALUES( idAutor, nombreLibro, numeroPaginas, categoria );
+    INSERT INTO libros( fk_iIdAutor, sNombreLibro, iNumeroPaginas, sCategoria, tFechaPublicacion )
+    VALUES( idAutor, nombreLibro, numeroPaginas, categoria, fecha );
 END //
 
 DELIMITER ;

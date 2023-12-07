@@ -3,15 +3,21 @@
 
 module.exports = {
 
-    hello() {
-        return "¡Hola¡ Esta es la página de inicio.";
+    hello( res ) {
+        return res.status(201).json({
+            message: "¡Hola¡ Esta es la página de inicio."
+        });
     },
 
-    about() {
-        return "Bienvenido a la página 'Acerca de nosotros'.";
+    about( res ) {
+        return res.status(201).json({
+            message: "Bienvenido a la página 'Acerca de nosotros'."
+        });
     },
 
-    contact() {
-        return "Ponte en contacto con nosotros en contact@example.com"
+    contact( res ) {
+        return res.status(201).json({
+            message: "Ponte en contacto con nosotros en contact@example.com"
+        });
     }
 }
