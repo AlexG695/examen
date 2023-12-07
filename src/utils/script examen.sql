@@ -54,6 +54,27 @@ END //
 
 DELIMITER ;
 
+
+DELIMITER //
+CREATE PROCEDURE CrearAutor(nombre TEXT, pais Text, lengua TEXT)
+BEGIN
+	INSERT INTO autores(sNombreAutor, sPaisOrigen, sLenguaNativa, tFechaNacimiento)
+    VALUES( nombre, pais, lengua, Now());
+END //
+
+DELIMITER ;
+
+
+
+DELIMITER //
+CREATE PROCEDURE CrearAutor(nombre TEXT, pais Text, lengua TEXT)
+BEGIN
+	INSERT INTO autores(sNombreAutor, sPaisOrigen, sLenguaNativa, tFechaNacimiento)
+    VALUES( nombre, pais, lengua, Now());
+END //
+
+DELIMITER ;
+
 SELECT * FROM usuarios
 
 
