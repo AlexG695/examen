@@ -120,6 +120,7 @@ module.exports = {
 
                 if ( !err ) {
                     var rows = JSON.parse(JSON.stringify(result[0]));
+                    
                     return res.status(201).json({
                         data: rows
                     });
@@ -136,7 +137,7 @@ module.exports = {
     },
 
 
-    async ObtenerAutoresConCantidadDeLibros(res) {
+    async ObtenerAutoresConCantidadDeLibros(req, res) {
         try {
 
             connection.query('CALL ObtenerAutoresConConteoPorLibros()', 
@@ -144,6 +145,7 @@ module.exports = {
             function(err, result) {
                 if ( !err ) {
                     var rows = JSON.parse(JSON.stringify(result[0]));
+
 
                     return res.status(201).json({
                         success: true,

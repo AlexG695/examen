@@ -9,7 +9,7 @@ module.exports = (app) => {
     
     app.get('/v1/api/autores/:id', passport.authenticate('jwt', {session: false}), AutoresController.ObtenerAutorPorId);
 
-    app.get('/v1/api/autores/contar', passport.authenticate('jwt', {session: false}), AutoresController.ObtenerAutoresConCantidadDeLibros);
+    app.get('/v1/api/autores', passport.authenticate('jwt', {session: false}), AutoresController.ObtenerAutoresConCantidadDeLibros);
 
     app.get('/v1/api/autores/libros/:id', passport.authenticate('jwt', {session: false}), AutoresController.ObtenerLibrosDeAutorPorId);
 
