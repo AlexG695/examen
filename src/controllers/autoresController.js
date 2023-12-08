@@ -44,13 +44,26 @@ module.exports = {
     async ObtenerAutorPorId(req, res) {
         try {
             
-            const id = req.body.id;
+            const id = req.params.id;
 
             connection.query('CALL ObtenerAutorPorId(?)', [
                 id
             ], function(err, result) {
                 if ( !err ) {
-                    console.log(result);
+                    var rows = JSON.parse(JSON.stringify(result[0]));
+                    data = {
+                        id: rows[0].iIdAutor,
+                        nombre: rows[0].sNombreAutor,
+                        pais: rows[0].sPaisOrigen,
+                        fechaNacimiento: rows[0].tFechaNacimiento
+
+                    };
+                    return res.status(201).json({
+                        success: true,
+                        data: data
+                    });
+                } else {
+                    console.log(err);
                 }
             });
 
@@ -73,7 +86,15 @@ module.exports = {
                 id
             ], function(err, result) {
                 if( !err ) {
-                    console.log(result);
+                    return res.status(201).json({
+                        success: true,
+                        message: `Se eliminó el id ${id} correctamente.`
+                    });
+                } else {
+                   return res.status(404).json({
+                        success: false,
+                        message: `No se encontró el id ${id}`
+                   });
                 }
             });
 
@@ -91,13 +112,18 @@ module.exports = {
     async ObtenerLibrosDeAutorPorId(req, res) {
         try {
             
-            const id = req.body.id;
+            const id = req.params.id;
 
             connection.query('CALL ObtenerLibrosPorIdAutor(?)', [
                 id
             ], function(err, result) {
 
-                console.log(result);
+                if ( !err ) {
+                    var rows = JSON.parse(JSON.stringify(result[0]));
+                    return res.status(201).json({
+                        data: rows
+                    });
+                }
 
             });
 
@@ -110,11 +136,32 @@ module.exports = {
     },
 
 
-    async ObtenerAutoresConCantidadDeLibros(req, res) {
+    async ObtenerAutoresConCantidadDeLibros(res) {
         try {
+
+            connection.query('CALL ObtenerAutoresConConteoPorLibros()', 
+            [],
+            function(err, result) {
+                if ( !err ) {
+                    var rows = JSON.parse(JSON.stringify(result[0]));
+
+                    return res.status(201).json({
+                        success: true,
+                        data: rows
+                    });
+                } else {
+                    return res.status(404).json({
+                        success: false,
+                        message: 'No se encontrarón datos.'
+                    });
+                }
+            });
             
         } catch (error) {
-            
+            return res.status(501).json({
+                success: false,
+                message: `Se presentó el siguiente error ${error}`
+            });
         }
     }
 

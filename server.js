@@ -20,7 +20,6 @@ require('dotenv').config({path: 'values.env'})
 
 
 const Usuario = require('./src/routes/usuariosRoutes');
-const Mensajes = require('./src/routes/mensajeRoutes');
 const Autor = require('./src/routes/autoresRoutes');
 const Libro = require('./src/routes/librosRoutes');
 
@@ -39,10 +38,13 @@ app.use(express.urlencoded({
 app.use(cors());
 app.use(passport.initialize());
 app.use(passport.session());
+require('./src/config/passport')(passport);
 app.use(helmet({
     contentSecurityPolicy: false,
     xDownloadOptions: false
 }));
+
+
 app.disable('x-powered-by');
 
 app.set('port', port);
@@ -56,7 +58,6 @@ app.set('port', port);
 
 
 Usuario(app);
-Mensajes(app);
 Autor(app);
 Libro(app)
 
@@ -77,6 +78,18 @@ server.listen(port, function() {
 app.use((err, req, res, next) => {
     console.log(err);
     res.status(err.status || 500).send(err.stack)
+});
+
+app.get('/',  (req, res) => {
+    res.send('¡Hola¡ Esta es la página de inicio.');
+});
+
+app.get('/about',  (req, res) => {
+    res.send("Bienvenido a la página 'Acerca de nosotros'");
+});
+
+app.get('/contact',  (req, res) => {
+    res.send('Ponte en contacto con nosotros en contact@example.com');
 });
 
 

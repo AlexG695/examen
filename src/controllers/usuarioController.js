@@ -11,12 +11,25 @@ module.exports = {
     async EncontrarUsuarioPorId(req, res) {
         try {
             
-            const id = req.body.id;
+            const id = req.params.id;
 
-            connection.query('CALL EncontrarUsuarioPorId(?)', [
+            connection.query('CALL ObtenerUsuarioPorId(?)', [
                 id
             ], function(err, result) {
-                
+                if ( !err ) {
+                    var rows = JSON.parse(JSON.stringify(result[0]));
+
+                    return res.status(201).json({
+                        success: true,
+                        message: `El usuario obtenido es: ${rows[0].sNombre}`
+                    });
+                    
+                } else {
+                    return res.status(404).json({
+                        success: false,
+                        message: `No se encontró un usuario con el id ${id}`
+                    })
+                }
             });
 
         } catch (error) {
@@ -116,7 +129,12 @@ module.exports = {
             connection.query('CALL EliminarUsuarioPorId(?)', [
                 idUser
             ], function(err, result) {
-
+                if ( !err ) {
+                    return res.status(201).json({
+                        success: true,
+                        message: `Se eliminó corectamente el usuario con id ${idUser}`
+                    })
+                }
             });
 
         } catch (error) {

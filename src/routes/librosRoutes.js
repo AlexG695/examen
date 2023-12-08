@@ -10,5 +10,5 @@ module.exports = (app) => {
     app.get('/v1/api/libros/:id', passport.authenticate('jwt', {session: false}), LibrosController.ObtenerLibroPorId);
 
 
-    app.delete('/v1/api/libros/delete/:id', passport.authenticate('jwt', {session: false}), LibrosController.EliminarLibroPorId);
+    app.delete('/v1/api/libros/delete', passport.authenticate('jwt', {session: false}), LibrosController.EliminarLibroPorId);
 }

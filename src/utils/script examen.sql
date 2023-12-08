@@ -29,7 +29,7 @@ CREATE TABLE libros(
     sNombreLibro VARCHAR(80) NOT NULL UNIQUE,
     iNumeroPaginas INT NOT NULL,
     sCategoria TEXT NOT NULL,
-    iCalificacionPromedio INT DEFAULT 0,
+    iCalificacion INT NULL,
     tFechaPublicacion VARCHAR(10) NOT NULL,
     FOREIGN KEY( fk_iIdAutor ) REFERENCES autores( iIdAutor ) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -50,7 +50,7 @@ CREATE PROCEDURE LogIn(correo VARCHAR(150))
 BEGIN
 	SELECT iId, sNombre, sCorreo, sContrasenia
     FROM usuarios
-    WHERE sCorreo = correo
+    WHERE sCorreo = correo;
 END //
 
 DELIMITER ;
@@ -59,7 +59,7 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE ObtenerUsuarioPorId(id INT)
 BEGIN
-	SELECT (sNombre, sApellido)
+	SELECT (sNombre)
     FROM usuarios
     WHERE iId = id;
 END //
@@ -79,7 +79,7 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE CrearAutor(nombre TEXT, pais Text, lengua TEXT, fecha VARCHAR)
+CREATE PROCEDURE CrearAutor(nombre TEXT, pais Text, lengua TEXT, fecha VARCHAR(10))
 BEGIN
 	INSERT INTO autores(sNombreAutor, sPaisOrigen, sLenguaNativa, tFechaNacimiento)
     VALUES( nombre, pais, lengua, fecha);
@@ -92,7 +92,7 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE ObtenerAutorPorId(id INT)
 BEGIN
-	SELECT (iIdAutor, sNombreAutor, sPaisOrigen, sLenguaNativa, tFechaNacimiento)
+	SELECT iIdAutor, sNombreAutor, sPaisOrigen, sLenguaNativa, tFechaNacimiento
     FROM autores
     WHERE iIdAutor = id;
 END //
@@ -112,10 +112,10 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE CrearLibro( idAutor INT, nombreLibro TEXT, numeroPaginas INT, categoria TEXT, fecha VARCHAR(10))
+CREATE PROCEDURE CrearLibro( idAutor INT, nombreLibro TEXT, numeroPaginas INT, categoria TEXT, calificacion INT ,fecha VARCHAR(10))
 BEGIN
-    INSERT INTO libros( fk_iIdAutor, sNombreLibro, iNumeroPaginas, sCategoria, tFechaPublicacion )
-    VALUES( idAutor, nombreLibro, numeroPaginas, categoria, fecha );
+    INSERT INTO libros( fk_iIdAutor, sNombreLibro, iNumeroPaginas, sCategoria, iCalificacion ,tFechaPublicacion )
+    VALUES( idAutor, nombreLibro, numeroPaginas, categoria, calificacion ,fecha );
 END //
 
 DELIMITER ;
@@ -124,7 +124,7 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE ObtenerLibroPorId(id INT)
 BEGIN
-	SELECT (fk_iIdAutor, sNombreLibro, iNumeroPaginas, sCategoria, iCalificacionPromedio)
+	SELECT fk_iIdAutor, sNombreLibro, iNumeroPaginas, sCategoria, iCalificacion
     FROM libros
     WHERE iIdLibro = id;
 END //
@@ -160,7 +160,7 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE ObtenerLibrosPorIdAutor(id INT)
 BEGIN
-	SELECT (fk_iIdAutor, sNombreLibro, iNumeroPaginas, sCategoria, iCalificacionPromedio)
+	SELECT fk_iIdAutor, sNombreLibro, iNumeroPaginas, sCategoria, iCalificacion, tFechaPublicacion
     FROM libros
     WHERE fk_iIdAutor = id;
 END //
@@ -172,8 +172,12 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE ObtenerAutoresConConteoPorLibros()
 BEGIN
-	SELECT (sNombreAutor) as Autor
-    FROM autores
+	SELECT A.sNombreAutor, COUNT(L.fk_iIdAutor)
+    FROM autores as A
+    INNER JOIN
+		libros as L
+	ON
+		A.iIdAutor = fk_iIdAutor;
 END //
 
 DELIMITER ;
